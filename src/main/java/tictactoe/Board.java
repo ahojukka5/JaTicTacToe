@@ -182,46 +182,76 @@ public final class Board {
     }
 
     /**
+     * Check diagonal win for player.
+     * @param pid player id
+     * @return boolean, true means win
+     */
+    private boolean checkDiagonalWin(final int pid) {
+        boolean diagonalWin1 = true;
+        boolean diagonalWin2 = true;
+        for (int i = 0; i < getNumberOfRows(); i++) {
+            diagonalWin1 &= (getState(i, i) == pid);
+            int j = getNumberOfRows() - i - 1;
+            diagonalWin2 &= (getState(i, j) == pid);
+        }
+        return (diagonalWin1 || diagonalWin2);
+    }
+
+    /**
+     * Check row win for player.
+     * @param pid player id
+     * @return boolean, true means win
+     */
+    private boolean checkRowWin(final int pid) {
+        for (int row = 0; row < getNumberOfRows(); row++) {
+            boolean rowWin = true;
+            for (int col = 0; col < getNumberOfColumns(); col++) {
+                rowWin &= (getState(row, col) == pid);
+            }
+            if (rowWin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check column win for player.
+     * @param pid player id
+     * @return boolean, true means win
+     */
+    private boolean checkColumnWin(final int pid) {
+        for (int col = 0; col < getNumberOfColumns(); col++) {
+            boolean colWin = true;
+            for (int row = 0; row < getNumberOfRows(); row++) {
+                colWin &= (getState(row, col) == pid);
+            }
+            if (colWin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+     /**
      * Get the winner of the game.
      *
      * @return player id of the winner or 0 if no winner
      */
     private int getGameWinner() {
         for (int p = 1; p <= getNumberOfPlayers(); p++) {
-
-            // check diagonals
-            boolean diagonalWin1 = true;
-            boolean diagonalWin2 = true;
-            for (int i = 0; i < getNumberOfRows(); i++) {
-                diagonalWin1 &= (getState(0, 0) == p);
-                diagonalWin2 &= (getState(i, getNumberOfRows() - i - 1) == p);
-            }
-            if (diagonalWin1 || diagonalWin2) {
+            if (checkDiagonalWin(p)) {
+                System.out.println("Diagonal win of player " + p);
                 return p;
             }
-
-            // check rows
-            for (int row = 0; row < getNumberOfRows(); row++) {
-                boolean rowWin = true;
-                for (int col = 0; col < getNumberOfColumns(); col++) {
-                    rowWin &= (getState(row, col) == p);
-                }
-                if (rowWin) {
-                    return p;
-                }
+            if (checkRowWin(p)) {
+                System.out.println("Row win of player " + p);
+                return p;
             }
-
-            // check columns
-            for (int col = 0; col < getNumberOfColumns(); col++) {
-                boolean colWin = true;
-                for (int row = 0; row < getNumberOfRows(); row++) {
-                    colWin &= (getState(row, col) == p);
-                }
-                if (colWin) {
-                    return p;
-                }
+            if (checkColumnWin(p)) {
+                System.out.println("Column win of player " + p);
+                return p;
             }
-
         }
         return 0;
     }
