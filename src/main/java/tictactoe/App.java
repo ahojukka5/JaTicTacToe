@@ -105,8 +105,8 @@ public final class App extends Application {
             if (!board.isPlayable(i, j)) {
                 return;
             }
-            board.play(i, j);
             updateButton();
+            board.play(i, j);
             updateHeader();
         }
     }
