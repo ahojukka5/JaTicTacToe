@@ -136,6 +136,24 @@ public final class Board {
     }
 
     /**
+     * Play cell in certain row and column.
+     *
+     * @param row row of the board
+     * @param col column of the board
+     *
+     * @throws IllegalArgumentException if cell is not playable
+     */
+    public void play(final int row, final int col) {
+        if (!isPlayable(row, col)) {
+            String msg = "Cannot play (%d, %d): not playable.";
+            String formattedMsg = String.format(msg, row, col);
+            throw new IllegalArgumentException(formattedMsg);
+        }
+        setState(row, col, getCurrentPlayer());
+        nextPlayer();
+    }
+
+    /**
      * Change turn to the next player.
      */
     public void nextPlayer() {
