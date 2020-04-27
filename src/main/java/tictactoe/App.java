@@ -43,7 +43,7 @@ public class App extends Application {
 
         private final Button btn;
         private boolean pressed = false;
-        private int i;
+        private final int i;
         private final int j;
 
         public ButtonClickHandler(Button button, int i, int j) {
