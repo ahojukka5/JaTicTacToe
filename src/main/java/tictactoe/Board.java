@@ -99,6 +99,7 @@ public final class Board {
 
     /**
      * Set the state of the game cell i, j.
+     *
      * @param i row in game
      * @param j column in game
      * @param v player id
@@ -109,11 +110,29 @@ public final class Board {
 
     /**
      * Return true if game is already played.
+     *
      * @return true if game is already played, false otherwise
      */
     public boolean endOfGame() {
         int maxNumberOfTurns = getNumberOfColumns() * getNumberOfColumns();
         return (getNumberOfTurnsPlayed() == maxNumberOfTurns || someoneWins());
+    }
+
+    /**
+     * Returns true if cell is playable.
+     *
+     * @param row number of row, starting from 0
+     * @param col number of column, starting from 0
+     * @return true if can play cell
+     */
+    public boolean isPlayable(final int row, final int col) {
+        if (getState(row, col) != 0) { // already played
+            return false;
+        }
+        if (endOfGame()) { // game over
+            return false;
+        }
+        return true;
     }
 
     /**
