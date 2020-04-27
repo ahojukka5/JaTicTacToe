@@ -72,11 +72,6 @@ public final class App extends Application {
         private final transient Button btn;
 
         /**
-         * Contains value is this button already pressed.
-         */
-        private transient boolean buttonPressed = false;
-
-        /**
          * Board row location for this button, 0 is first.
          */
         private final transient int i;
@@ -100,10 +95,9 @@ public final class App extends Application {
 
         @Override
         public void handle(final ActionEvent event) {
-            if (buttonPressed || board.endOfGame()) {
+            if (!board.isPlayable(i, j)) {
                 return;
             }
-            buttonPressed = true;
             btn.setText(App.this.getCurrentPlayerMark());
             board.setState(i, j, board.getCurrentPlayer());
             board.nextPlayer();
