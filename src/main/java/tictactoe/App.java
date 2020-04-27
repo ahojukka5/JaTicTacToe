@@ -93,14 +93,20 @@ public final class App extends Application {
             this.j = col;
         }
 
+        /**
+         * Update button text to X or O.
+         */
+        public void updateButton() {
+            btn.setText(getCurrentPlayerMark());
+        }
+
         @Override
         public void handle(final ActionEvent event) {
             if (!board.isPlayable(i, j)) {
                 return;
             }
-            btn.setText(App.this.getCurrentPlayerMark());
-            board.setState(i, j, board.getCurrentPlayer());
-            board.nextPlayer();
+            board.play(i, j);
+            updateButton();
             updateHeader();
         }
     }
