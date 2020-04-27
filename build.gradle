@@ -6,15 +6,27 @@ plugins {
     id 'com.github.kt3k.coveralls' version '2.8.4'
     id 'com.github.spotbugs' version '4.0.0'
     id 'pmd'
+    id 'checkstyle'
 }
 
 repositories {
     jcenter()
 }
 
+configurations {
+    checkstyleConfig
+}
+
+def versions = [
+    checkstyle: '8.10.1',
+]
+
 dependencies {
     testImplementation 'junit:junit:4.12'
     spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+    checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
+        transitive = false
+    }
 }
 
 javafx {
@@ -37,6 +49,13 @@ spotbugsMain {
             stylesheet = 'fancy-hist.xsl'
         }
     }
+}
+
+checkstyle {
+    showViolations = true
+    ignoreFailures = false
+    toolVersion = "${versions.checkstyle}"
+    config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'sun_checks.xml')
 }
 
 application {
