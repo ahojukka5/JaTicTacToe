@@ -1,63 +1,144 @@
 package tictactoe;
 
-public class Board {
+/**
+ * Tic Tac Toe board.
+ */
+public final class Board {
 
-    // Game state, 0 = unplayed, 1 = player 1, 2 = player 2.
-    private final int[][] state = new int[3][3];
+    /**
+     * Number of rows this board has.
+     */
+    private static final int ROWS = 3;
+
+    /**
+     * Number of columns this board has.
+     */
+    private static final int COLUMNS = 3;
+
+    /**
+     * Game state.
+     *
+     * 0 = unplayed
+     * 1 = player 1
+     * 2 = player 2
+     */
+    private final int[][] state = new int[ROWS][COLUMNS];
+
+    /**
+     * Contains information which playes is in turn.
+     */
     private int currentPlayer = 1;
-    private int numberOfTurnsPlayed = 0;
-    private static final int numberOfPlayers = 2;
 
+    /**
+     * Contains integer telling how many turns has been played so far.
+     */
+    private int numberOfTurnsPlayed = 0;
+
+    /**
+     * How many players is in game.
+     */
+    private final int numberOfPlayers = 2;
+
+    /**
+     * Get number of rows in this game.
+     * @return integer
+     */
+    public int getNumberOfRows() {
+        return ROWS;
+    }
+
+    /**
+     * Get number of columns in this game.
+     * @return integer
+     */
+    public int getNumberOfColumns() {
+        return COLUMNS;
+    }
+
+    /**
+     * Get number of turns played in this game.
+     * @return integer
+     */
     private int getNumberOfTurnsPlayed() {
         return numberOfTurnsPlayed;
     }
 
+    /**
+     * Get number of players in this game.
+     * @return integer
+     */
     private int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
+    /**
+     * Get current player number.
+     * @return integer
+     */
     public int getCurrentPlayer() {
         return currentPlayer;
     }
 
-    private void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    /**
+     * Set current player number.
+     * @param player id number of player
+     */
+    private void setCurrentPlayer(final int player) {
+        this.currentPlayer = player;
     }
 
     /**
      * Return the game state for cell i, j.
-     *
-     * @return integer corresponding the player id in that cell or 0 if cell has not been played yet
+     * @param i row in game
+     * @param j column in game
+     * @return id number of player or 0 if not played yet
      */
-    public int getState(int i, int j) {
+    public int getState(final int i, final int j) {
         return state[i][j];
     }
 
-    public void setState(int i, int j, int v) {
+    /**
+     * Set the state of the game cell i, j.
+     * @param i row in game
+     * @param j column in game
+     * @param v player id
+     */
+    public void setState(final int i, final int j, final int v) {
         state[i][j] = v;
     }
 
     /**
      * Return true if game is already played.
+     * @return true if game is already played, false otherwise
      */
     public boolean endOfGame() {
-        return (getNumberOfTurnsPlayed() == 9 || someoneWins());
+        int maxNumberOfTurns = getNumberOfColumns() * getNumberOfColumns();
+        return (getNumberOfTurnsPlayed() == maxNumberOfTurns || someoneWins());
     }
 
     /**
      * Change turn to the next player.
      */
     public void nextPlayer() {
-        setCurrentPlayer(getCurrentPlayer() == getNumberOfPlayers() ? 1 : getCurrentPlayer() + 1);
+        if (getCurrentPlayer() == getNumberOfPlayers()) {
+            setCurrentPlayer(1);
+        } else {
+            setCurrentPlayer(getCurrentPlayer() + 1);
+        }
         setNumberOfTurnsPlayed(getNumberOfTurnsPlayed() + 1);
     }
 
-    private void setNumberOfTurnsPlayed(int i) {
+    /**
+     * Set how many turns has been played so far.
+     * @param i number of turns
+     */
+    private void setNumberOfTurnsPlayed(final int i) {
         numberOfTurnsPlayed = i;
     }
 
     /**
      * Return true if someone has been winning the game.
+     * @return true value if someone already has won
      */
     private boolean someoneWins() {
         return getGameWinner() != 0;
@@ -65,30 +146,45 @@ public class Board {
 
     /**
      * Get the winner of the game.
-     * 
+     *
      * @return player id of the winner or 0 if no winner
      */
     private int getGameWinner() {
         for (int p = 1; p <= getNumberOfPlayers(); p++) {
 
             // check diagonals
-            if (getState(0, 0) == p && getState(1, 1) == p && getState(2, 2) == p) {
+            boolean diagonalWin1 = true;
+            boolean diagonalWin2 = true;
+            for (int i = 0; i < getNumberOfRows(); i++) {
+                diagonalWin1 &= (getState(0, 0) == p);
+                diagonalWin2 &= (getState(i, getNumberOfRows() - i - 1) == p);
+            }
+            if (diagonalWin1 || diagonalWin2) {
                 return p;
             }
-            if (getState(0, 2) == p && getState(1, 1) == p && getState(2, 0) == p) {
-                return p;
-            }
+
             // check rows
-            for (int r = 0; r < 3; r++) {
-                if (getState(r, 0) == p && getState(r, 1) == p && getState(r, 2) == p) {
+            for (int row = 0; row < getNumberOfRows(); row++) {
+                boolean rowWin = true;
+                for (int col = 0; col < getNumberOfColumns(); col++) {
+                    rowWin &= (getState(row, col) == p);
+                }
+                if (rowWin) {
                     return p;
                 }
             }
+
             // check columns
-            for (int c = 0; c < 3; c++) {
-                if (getState(0, c) == p && getState(1, c) == p && getState(2, c) == p)
+            for (int col = 0; col < getNumberOfColumns(); col++) {
+                boolean colWin = true;
+                for (int row = 0; row < getNumberOfRows(); row++) {
+                    colWin &= (getState(row, col) == p);
+                }
+                if (colWin) {
                     return p;
+                }
             }
+
         }
         return 0;
     }
