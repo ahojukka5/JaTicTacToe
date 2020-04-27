@@ -4,7 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.8'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.8.4'
-    id 'com.github.spotbugs' version '4.0.0'
+    // id 'com.github.spotbugs' version '4.0.2'
     id 'pmd'
     id 'checkstyle'
 }
@@ -23,7 +23,7 @@ def versions = [
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
+    // spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1'
     checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
         transitive = false
     }
@@ -41,6 +41,7 @@ jacocoTestReport {
     }
 }
 
+/*
 spotbugsMain {
     reports {
         html {
@@ -50,6 +51,7 @@ spotbugsMain {
         }
     }
 }
+*/
 
 checkstyle {
     showViolations = true
