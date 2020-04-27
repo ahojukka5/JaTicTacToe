@@ -5,6 +5,7 @@ plugins {
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.8.4'
     id 'com.github.spotbugs' version '4.0.0'
+    id 'pmd'
 }
 
 repositories {
