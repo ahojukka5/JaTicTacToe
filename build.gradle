@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+javafx {
+    version = "14"
+    modules = [ 'javafx.controls' ]
+}
+
+application {
+    mainClassName = 'tictactoe.App'
+}
