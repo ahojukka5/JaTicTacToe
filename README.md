@@ -1,6 +1,7 @@
 # JaTicTacToe
 
 [![Build Status][travis-img]][travis-url]
+[![Coveralls Status][coveralls-img]][coveralls-url]
 
 ![TicTacToe](docs/src/game.png)
 
@@ -17,3 +18,5 @@ using JavaFX.
 
 [travis-img]: https://travis-ci.org/ahojukka5/JaTicTacToe.svg?branch=master
 [travis-url]: https://travis-ci.org/ahojukka5/JaTicTacToe
+[coveralls-img]: https://coveralls.io/repos/github/ahojukka5/JaTicTacToe/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/ahojukka5/JaTicTacToe?branch=master
