@@ -14,8 +14,8 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static final char[] playerMarks = new char[]{'_', 'X', 'O'};
-    private final Label header = new Label("Turn: X");
-    private final Board board = new Board();
+    private transient final Label header = new Label("Turn: X");
+    private transient final Board board = new Board();
 
     /**
      * Return the current player mark, either "X" or "O"
@@ -41,24 +41,24 @@ public class App extends Application {
      */
     private class ButtonClickHandler implements EventHandler<ActionEvent> {
 
-        private final Button btn;
-        private boolean pressed = false;
-        private final int i;
-        private final int j;
+        private transient final Button button;
+        private transient boolean buttonPressed = false;
+        private transient final int i;
+        private transient final int j;
 
         public ButtonClickHandler(Button button, int i, int j) {
-            this.btn = button;
+            this.button = button;
             this.i = i;
             this.j = j;
         }
 
         @Override
         public void handle(ActionEvent event) {
-            if (pressed || board.endOfGame()) {
+            if (buttonPressed || board.endOfGame()) {
                 return;
             }
-            pressed = true;
-            btn.setText(App.this.getCurrentPlayerMark());
+            buttonPressed = true;
+            button.setText(App.this.getCurrentPlayerMark());
             board.setState(i, j, board.getCurrentPlayer());
             board.nextPlayer();
             updateHeader();
