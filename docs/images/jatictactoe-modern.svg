@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="720" viewBox="0 0 1040 720" role="img" aria-labelledby="title desc">
+  <title id="title">JaTicTacToe modern JavaFX interface</title>
+  <desc id="desc">Dark themed JaTicTacToe application with match setup, session score, and a three by three game board.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#09101f"/>
+      <stop offset="0.55" stop-color="#11172b"/>
+      <stop offset="1" stop-color="#15112a"/>
+    </linearGradient>
+    <radialGradient id="orbPurple">
+      <stop offset="0" stop-color="#7c62ff" stop-opacity="0.68"/>
+      <stop offset="1" stop-color="#7c62ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="orbCyan">
+      <stop offset="0" stop-color="#18c8d8" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#18c8d8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b72ff"/>
+      <stop offset="1" stop-color="#4a6cff"/>
+    </linearGradient>
+    <linearGradient id="cell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#232b45"/>
+      <stop offset="1" stop-color="#181f35"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.30"/>
+    </filter>
+    <filter id="smallShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="1040" height="720" rx="18" fill="url(#background)"/>
+  <circle cx="70" cy="35" r="255" fill="url(#orbPurple)"/>
+  <circle cx="970" cy="690" r="220" fill="url(#orbCyan)"/>
+
+  <g font-family="Segoe UI, Inter, Arial, sans-serif">
+    <rect x="34" y="28" width="50" height="50" rx="16" fill="url(#accent)" filter="url(#smallShadow)"/>
+    <text x="59" y="59" fill="#ffffff" font-size="17" font-weight="800" text-anchor="middle">XO</text>
+    <text x="97" y="51" fill="#f8f9ff" font-size="22" font-weight="800">JaTicTacToe</text>
+    <text x="97" y="70" fill="#949db7" font-size="12">A small classic, rebuilt with modern Java</text>
+
+    <rect x="899" y="33" width="107" height="40" rx="12" fill="none" stroke="#ffffff" stroke-opacity="0.14"/>
+    <text x="952.5" y="58" fill="#d5d9e9" font-size="12" font-weight="800" text-anchor="middle">Light mode</text>
+
+    <rect x="34" y="103" width="276" height="584" rx="26" fill="#12192e" fill-opacity="0.92" stroke="#ffffff" stroke-opacity="0.08" filter="url(#shadow)"/>
+    <text x="59" y="139" fill="#8b72ff" font-size="10" font-weight="800" letter-spacing="1.2">MATCH SETUP</text>
+    <text x="59" y="171" fill="#f8f9ff" font-size="20" font-weight="800">Choose your game</text>
+
+    <rect x="59" y="194" width="226" height="45" rx="12" fill="url(#accent)" filter="url(#smallShadow)"/>
+    <text x="77" y="222" fill="#ffffff" font-size="13" font-weight="700">Vs computer</text>
+    <circle cx="265" cy="216.5" r="7" fill="#ffffff" fill-opacity="0.9"/>
+    <rect x="59" y="248" width="226" height="45" rx="12" fill="#ffffff" fill-opacity="0.045" stroke="#ffffff" stroke-opacity="0.07"/>
+    <text x="77" y="276" fill="#cbd1e2" font-size="13" font-weight="700">Two players</text>
+
+    <text x="59" y="323" fill="#949db7" font-size="11" font-weight="700">Computer strength</text>
+    <rect x="59" y="335" width="226" height="42" rx="12" fill="#ffffff" fill-opacity="0.055" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="75" y="361" fill="#e8eaff" font-size="13">Unbeatable</text>
+    <path d="M265 351 l6 7 6-7" fill="none" stroke="#949db7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <line x1="59" y1="403" x2="285" y2="403" stroke="#ffffff" stroke-opacity="0.08"/>
+    <text x="59" y="433" fill="#8b72ff" font-size="10" font-weight="800" letter-spacing="1.2">SESSION SCORE</text>
+
+    <g>
+      <rect x="59" y="449" width="69" height="61" rx="13" fill="#ffffff" fill-opacity="0.045"/>
+      <rect x="137" y="449" width="69" height="61" rx="13" fill="#ffffff" fill-opacity="0.045"/>
+      <rect x="216" y="449" width="69" height="61" rx="13" fill="#ffffff" fill-opacity="0.045"/>
+      <text x="93.5" y="480" fill="#7d8cff" font-size="21" font-weight="800" text-anchor="middle">2</text>
+      <text x="171.5" y="480" fill="#aab0c5" font-size="21" font-weight="800" text-anchor="middle">1</text>
+      <text x="250.5" y="480" fill="#35d0c7" font-size="21" font-weight="800" text-anchor="middle">1</text>
+      <text x="93.5" y="498" fill="#949db7" font-size="9" font-weight="700" text-anchor="middle">X</text>
+      <text x="171.5" y="498" fill="#949db7" font-size="9" font-weight="700" text-anchor="middle">DRAW</text>
+      <text x="250.5" y="498" fill="#949db7" font-size="9" font-weight="700" text-anchor="middle">O</text>
+    </g>
+
+    <text x="59" y="541" fill="#8b72ff" font-size="11" font-weight="700">Reset match score</text>
+    <text x="59" y="579" fill="#949db7" font-size="12">Tip: the unbeatable opponent</text>
+    <text x="59" y="597" fill="#949db7" font-size="12">evaluates every possible</text>
+    <text x="59" y="615" fill="#949db7" font-size="12">continuation.</text>
+
+    <rect x="334" y="103" width="672" height="584" rx="26" fill="#12192e" fill-opacity="0.92" stroke="#ffffff" stroke-opacity="0.08" filter="url(#shadow)"/>
+    <text x="359" y="136" fill="#8b72ff" font-size="10" font-weight="800">ROUND 5</text>
+    <text x="359" y="166" fill="#f8f9ff" font-size="22" font-weight="800">Your turn</text>
+    <text x="359" y="187" fill="#949db7" font-size="12">Place X on any open square.</text>
+
+    <rect x="866" y="127" width="114" height="29" rx="15" fill="#30d8bf" fill-opacity="0.10" stroke="#30d8bf" stroke-opacity="0.20"/>
+    <circle cx="884" cy="141.5" r="4" fill="#35d0c7"/>
+    <text x="931" y="145" fill="#35d0c7" font-size="10" font-weight="800" text-anchor="middle">VS COMPUTER</text>
+
+    <rect x="427" y="211" width="487" height="401" rx="24" fill="#070c19" fill-opacity="0.46" stroke="#ffffff" stroke-opacity="0.055"/>
+
+    <g filter="url(#smallShadow)">
+      <rect x="448" y="232" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="593" y="232" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="738" y="232" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="448" y="352" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="593" y="352" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="738" y="352" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="448" y="472" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="593" y="472" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+      <rect x="738" y="472" width="137" height="112" rx="20" fill="url(#cell)" stroke="#ffffff" stroke-opacity="0.07"/>
+    </g>
+
+    <g font-size="54" font-weight="700" text-anchor="middle">
+      <text x="516.5" y="307" fill="#7d8cff">X</text>
+      <text x="661.5" y="307" fill="#35d0c7">O</text>
+      <text x="806.5" y="307" fill="#7d8cff">X</text>
+      <text x="516.5" y="427" fill="#35d0c7">O</text>
+      <text x="661.5" y="427" fill="#7d8cff">X</text>
+      <text x="806.5" y="547" fill="#35d0c7">O</text>
+    </g>
+
+    <text x="359" y="653" fill="#949db7" font-size="12">Tab to move · Enter or Space to place</text>
+    <rect x="863" y="625" width="117" height="40" rx="12" fill="url(#accent)" filter="url(#smallShadow)"/>
+    <text x="921.5" y="650" fill="#ffffff" font-size="12" font-weight="800" text-anchor="middle">New round</text>
+  </g>
+</svg>
