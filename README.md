@@ -4,6 +4,10 @@ A polished desktop Tic-Tac-Toe game built with modern Java and JavaFX.
 
 The original 2020 learning project has been rebuilt as a small, production-quality desktop application with a separated game engine, a deterministic minimax opponent, a responsive interface, automated tests, and native packaging support.
 
+<p align="center">
+  <img src="docs/images/jatictactoe-modern.svg" alt="JaTicTacToe modern JavaFX interface" width="900">
+</p>
+
 ## Highlights
 
 - Modern JavaFX interface with dark and light themes
