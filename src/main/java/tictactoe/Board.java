@@ -1,258 +1,176 @@
 package tictactoe;
 
-/**
- * Tic Tac Toe board.
- */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+/** Rules and state for one Tic-Tac-Toe round. */
 public final class Board {
+    public static final int SIZE = 3;
 
-    /**
-     * Number of rows this board has.
-     */
-    private static final int ROWS = 3;
+    private static final List<List<Position>> WINNING_LINES =
+            List.of(
+                    line(0, 0, 0, 1, 0, 2),
+                    line(1, 0, 1, 1, 1, 2),
+                    line(2, 0, 2, 1, 2, 2),
+                    line(0, 0, 1, 0, 2, 0),
+                    line(0, 1, 1, 1, 2, 1),
+                    line(0, 2, 1, 2, 2, 2),
+                    line(0, 0, 1, 1, 2, 2),
+                    line(0, 2, 1, 1, 2, 0));
 
-    /**
-     * Number of columns this board has.
-     */
-    private static final int COLUMNS = 3;
+    private final Mark[][] cells = new Mark[SIZE][SIZE];
+    private Mark currentPlayer = Mark.X;
+    private GameOutcome outcome = GameOutcome.IN_PROGRESS;
+    private List<Position> winningLine = List.of();
+    private int moveCount;
 
-    /**
-     * Game state.
-     *
-     * 0 = unplayed
-     * 1 = player 1
-     * 2 = player 2
-     */
-    private final int[][] state = new int[ROWS][COLUMNS];
-
-    /**
-     * Contains information which playes is in turn.
-     */
-    private int currentPlayer = 1;
-
-    /**
-     * Contains integer telling how many turns has been played so far.
-     */
-    private int numberOfTurnsPlayed = 0;
-
-    /**
-     * How many players is in game.
-     */
-    private final int numberOfPlayers = 2;
-
-    /**
-     * Get number of rows in this game.
-     * @return integer
-     */
-    public int getNumberOfRows() {
-        return ROWS;
+    /** Creates an empty board with X to move. */
+    public Board() {
+        reset();
     }
 
-    /**
-     * Get number of columns in this game.
-     * @return integer
-     */
-    public int getNumberOfColumns() {
-        return COLUMNS;
+    private Board(final Board source) {
+        for (int row = 0; row < SIZE; row++) {
+            System.arraycopy(source.cells[row], 0, cells[row], 0, SIZE);
+        }
+        currentPlayer = source.currentPlayer;
+        outcome = source.outcome;
+        winningLine = source.winningLine;
+        moveCount = source.moveCount;
     }
 
-    /**
-     * Get number of turns played in this game.
-     * @return integer
-     */
-    private int getNumberOfTurnsPlayed() {
-        return numberOfTurnsPlayed;
+    /** Returns a deep copy suitable for simulation. */
+    public Board copy() {
+        return new Board(this);
     }
 
-    /**
-     * Get number of players in this game.
-     * @return integer
-     */
-    private int getNumberOfPlayers() {
-        return numberOfPlayers;
+    /** Clears the round and gives the first move to X. */
+    public void reset() {
+        for (Mark[] row : cells) {
+            Arrays.fill(row, Mark.EMPTY);
+        }
+        currentPlayer = Mark.X;
+        outcome = GameOutcome.IN_PROGRESS;
+        winningLine = List.of();
+        moveCount = 0;
     }
 
-    /**
-     * Get current player number.
-     * @return integer
-     */
-    public int getCurrentPlayer() {
+    /** Returns the mark at a position. */
+    public Mark markAt(final Position position) {
+        Objects.requireNonNull(position, "position");
+        return cells[position.row()][position.column()];
+    }
+
+    /** Returns the mark at a zero-based row and column. */
+    public Mark markAt(final int row, final int column) {
+        return markAt(new Position(row, column));
+    }
+
+    /** Returns the player whose turn it is. */
+    public Mark currentPlayer() {
         return currentPlayer;
     }
 
-    /**
-     * Set current player number.
-     * @param player id number of player
-     */
-    private void setCurrentPlayer(final int player) {
-        this.currentPlayer = player;
+    /** Returns the current round outcome. */
+    public GameOutcome outcome() {
+        return outcome;
     }
 
-    /**
-     * Return the game state for cell i, j.
-     * @param i row in game
-     * @param j column in game
-     * @return id number of player or 0 if not played yet
-     */
-    public int getState(final int i, final int j) {
-        return state[i][j];
+    /** Returns the winning cells, or an empty list. */
+    public List<Position> winningLine() {
+        return winningLine;
     }
 
-    /**
-     * Set the state of the game cell i, j.
-     *
-     * @param i row in game
-     * @param j column in game
-     * @param v player id
-     */
-    public void setState(final int i, final int j, final int v) {
-        state[i][j] = v;
+    /** Returns the number of moves played. */
+    public int moveCount() {
+        return moveCount;
     }
 
-    /**
-     * Return true if game is already played.
-     *
-     * @return true if game is already played, false otherwise
-     */
-    public boolean endOfGame() {
-        int maxNumberOfTurns = getNumberOfColumns() * getNumberOfColumns();
-        return (getNumberOfTurnsPlayed() == maxNumberOfTurns || someoneWins());
+    /** Returns whether a position can be played now. */
+    public boolean isPlayable(final Position position) {
+        return !outcome.isFinished() && markAt(position) == Mark.EMPTY;
     }
 
-    /**
-     * Returns true if cell is playable.
-     *
-     * @param row number of row, starting from 0
-     * @param col number of column, starting from 0
-     * @return true if can play cell
-     */
-    public boolean isPlayable(final int row, final int col) {
-        if (getState(row, col) != 0) { // already played
+    /** Places the current player's mark. */
+    public void play(final Position position) {
+        Objects.requireNonNull(position, "position");
+        if (!isPlayable(position)) {
+            throw new IllegalArgumentException("Position is not playable: " + position);
+        }
+
+        cells[position.row()][position.column()] = currentPlayer;
+        moveCount++;
+        updateOutcome();
+        if (!outcome.isFinished()) {
+            currentPlayer = currentPlayer.opponent();
+        }
+    }
+
+    /** Convenience overload using zero-based row and column. */
+    public void play(final int row, final int column) {
+        play(new Position(row, column));
+    }
+
+    /** Returns all currently playable positions. */
+    public List<Position> availablePositions() {
+        if (outcome.isFinished()) {
+            return List.of();
+        }
+        List<Position> positions = new ArrayList<>();
+        for (int row = 0; row < SIZE; row++) {
+            for (int column = 0; column < SIZE; column++) {
+                Position position = new Position(row, column);
+                if (markAt(position) == Mark.EMPTY) {
+                    positions.add(position);
+                }
+            }
+        }
+        return Collections.unmodifiableList(positions);
+    }
+
+    /** Returns true if placing the supplied mark at a position would win. */
+    public boolean wouldWin(final Position position, final Mark mark) {
+        Objects.requireNonNull(position, "position");
+        Objects.requireNonNull(mark, "mark");
+        if (mark == Mark.EMPTY || markAt(position) != Mark.EMPTY) {
             return false;
         }
-        if (endOfGame()) { // game over
-            return false;
+
+        cells[position.row()][position.column()] = mark;
+        boolean wins = findWinningLine(mark).isPresent();
+        cells[position.row()][position.column()] = Mark.EMPTY;
+        return wins;
+    }
+
+    private void updateOutcome() {
+        var line = findWinningLine(currentPlayer);
+        if (line.isPresent()) {
+            winningLine = line.orElseThrow();
+            outcome = currentPlayer == Mark.X ? GameOutcome.X_WON : GameOutcome.O_WON;
+        } else if (moveCount == SIZE * SIZE) {
+            outcome = GameOutcome.DRAW;
         }
-        return true;
     }
 
-    /**
-     * Play cell in certain row and column.
-     *
-     * @param row row of the board
-     * @param col column of the board
-     *
-     * @throws IllegalArgumentException if cell is not playable
-     */
-    public void play(final int row, final int col) {
-        if (!isPlayable(row, col)) {
-            String msg = "Cannot play (%d, %d): not playable.";
-            String formattedMsg = String.format(msg, row, col);
-            throw new IllegalArgumentException(formattedMsg);
-        }
-        setState(row, col, getCurrentPlayer());
-        nextPlayer();
+    private java.util.Optional<List<Position>> findWinningLine(final Mark mark) {
+        return WINNING_LINES.stream()
+                .filter(line -> line.stream().allMatch(position -> markAt(position) == mark))
+                .findFirst();
     }
 
-    /**
-     * Change turn to the next player.
-     */
-    public void nextPlayer() {
-        if (getCurrentPlayer() == getNumberOfPlayers()) {
-            setCurrentPlayer(1);
-        } else {
-            setCurrentPlayer(getCurrentPlayer() + 1);
-        }
-        setNumberOfTurnsPlayed(getNumberOfTurnsPlayed() + 1);
-    }
-
-    /**
-     * Set how many turns has been played so far.
-     * @param i number of turns
-     */
-    private void setNumberOfTurnsPlayed(final int i) {
-        numberOfTurnsPlayed = i;
-    }
-
-    /**
-     * Return true if someone has been winning the game.
-     * @return true value if someone already has won
-     */
-    private boolean someoneWins() {
-        return getGameWinner() != 0;
-    }
-
-    /**
-     * Check diagonal win for player.
-     * @param pid player id
-     * @return boolean, true means win
-     */
-    private boolean checkDiagonalWin(final int pid) {
-        boolean diagonalWin1 = true;
-        boolean diagonalWin2 = true;
-        for (int i = 0; i < getNumberOfRows(); i++) {
-            diagonalWin1 &= (getState(i, i) == pid);
-            int j = getNumberOfRows() - i - 1;
-            diagonalWin2 &= (getState(i, j) == pid);
-        }
-        return (diagonalWin1 || diagonalWin2);
-    }
-
-    /**
-     * Check row win for player.
-     * @param pid player id
-     * @return boolean, true means win
-     */
-    private boolean checkRowWin(final int pid) {
-        for (int row = 0; row < getNumberOfRows(); row++) {
-            boolean rowWin = true;
-            for (int col = 0; col < getNumberOfColumns(); col++) {
-                rowWin &= (getState(row, col) == pid);
-            }
-            if (rowWin) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check column win for player.
-     * @param pid player id
-     * @return boolean, true means win
-     */
-    private boolean checkColumnWin(final int pid) {
-        for (int col = 0; col < getNumberOfColumns(); col++) {
-            boolean colWin = true;
-            for (int row = 0; row < getNumberOfRows(); row++) {
-                colWin &= (getState(row, col) == pid);
-            }
-            if (colWin) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-     /**
-     * Get the winner of the game.
-     *
-     * @return player id of the winner or 0 if no winner
-     */
-    private int getGameWinner() {
-        for (int p = 1; p <= getNumberOfPlayers(); p++) {
-            if (checkDiagonalWin(p)) {
-                System.out.println("Diagonal win of player " + p);
-                return p;
-            }
-            if (checkRowWin(p)) {
-                System.out.println("Row win of player " + p);
-                return p;
-            }
-            if (checkColumnWin(p)) {
-                System.out.println("Column win of player " + p);
-                return p;
-            }
-        }
-        return 0;
+    private static List<Position> line(
+            final int row1,
+            final int column1,
+            final int row2,
+            final int column2,
+            final int row3,
+            final int column3) {
+        return List.of(
+                new Position(row1, column1),
+                new Position(row2, column2),
+                new Position(row3, column3));
     }
 }
